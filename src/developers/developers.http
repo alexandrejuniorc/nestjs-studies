@@ -1,11 +1,15 @@
+@BASE_URL=http://localhost:3000
+@DEVELOPER_ID=dev_eGWmxCzh0g8qJ0wQT2oCu
+
+
 ### list developers
-GET http://localhost:3000/developers
+GET {{BASE_URL}}/developers
 
 ### get developer
-GET http://localhost:3000/developers/dev_eGWmxCzh0g8qJ0wQT2oCu
+GET {{BASE_URL}}/developers/{{DEVELOPER_ID}}
 
 ### create developer
-POST http://localhost:3000/developers
+POST {{BASE_URL}}/developers
 Content-Type: application/json
 
 {
@@ -15,7 +19,7 @@ Content-Type: application/json
 }
 
 ### update developer
-PATCH http://localhost:3000/developers/dev_eGWmxCzh0g8qJ0wQT2oCu
+PATCH {{BASE_URL}}/developers/{{DEVELOPER_ID}}
 Content-Type: application/json
 
 {
@@ -23,4 +27,4 @@ Content-Type: application/json
 }
 
 ### delete developer
-DELETE http://localhost:3000/developers/dev_eGWmxCzh0g8qJ0wQT2oCu
+DELETE {{BASE_URL}}/developers/{{DEVELOPER_ID}}
