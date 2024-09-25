@@ -1,5 +1,7 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm';
-import { nanoid } from 'nanoid';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { nanoid } = require('nanoid');
 
 @Entity('developers')
 export class Developer {
