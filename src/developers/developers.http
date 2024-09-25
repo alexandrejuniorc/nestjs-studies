@@ -2,7 +2,7 @@
 GET http://localhost:3000/developers
 
 ### get developer
-GET http://localhost:3000/developers/1
+GET http://localhost:3000/developers/dev_eGWmxCzh0g8qJ0wQT2oCu
 
 ### create developer
 POST http://localhost:3000/developers
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### update developer
-PATCH http://localhost:3000/developers/3
+PATCH http://localhost:3000/developers/dev_eGWmxCzh0g8qJ0wQT2oCu
 Content-Type: application/json
 
 {
@@ -23,4 +23,4 @@ Content-Type: application/json
 }
 
 ### delete developer
-DELETE http://localhost:3000/developers/3
+DELETE http://localhost:3000/developers/dev_eGWmxCzh0g8qJ0wQT2oCu
