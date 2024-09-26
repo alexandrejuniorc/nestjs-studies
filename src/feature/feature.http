@@ -1,0 +1,8 @@
+@BASE_URL=http://localhost:3000
+@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAYWNtZS5jb20iLCJpYXQiOjE3MjczMjAxMzUsImV4cCI6MTcyNzMyMDE5NX0.V9PvXaw56VC53SaM-zqF1wEJdNq6l1dNn6xLNHp81MA
+### public
+GET {{BASE_URL}}/feature/public
+
+### private
+GET {{BASE_URL}}/feature/private
+Authorization: Bearer {{TOKEN}}

@@ -5,12 +5,15 @@ import {
 } from '@nestjs/common';
 import { promisify } from 'node:util';
 import { scrypt as _scrypt, randomBytes } from 'node:crypto';
+import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
   private readonly users = [];
+
+  constructor(private readonly jwtService: JwtService) {}
 
   async signUp(email: string, password: string) {
     const userExists = this.users.find((user) => user.email === email);
@@ -50,8 +53,7 @@ export class AuthService {
     }
 
     console.log('Signed in', user);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, ...result } = user;
-    return result;
+    const payload = { username: user.email, sub: user.userId };
+    return { access_token: this.jwtService.sign(payload) };
   }
 }
