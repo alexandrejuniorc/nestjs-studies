@@ -12,6 +12,7 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class AuthService {
   private readonly users = [];
+  private readonly refreshTokens = [];
   private readonly scrypt = promisify(_scrypt);
 
   constructor(private readonly jwtService: JwtService) {}
@@ -56,6 +57,58 @@ export class AuthService {
       sub: user.id,
       roles: user.roles,
     };
-    return { access_token: this.jwtService.sign(payload) };
+
+    const accessToken = this.jwtService.sign(
+      { ...payload, type: 'access' },
+      { expiresIn: '60s' },
+    );
+
+    const refreshToken = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      { expiresIn: '1h' },
+    );
+
+    this.refreshTokens.push({ value: refreshToken });
+
+    return { accessToken, refreshToken };
+  }
+
+  async refresh(refreshToken: string) {
+    const storedToken = this.refreshTokens.find(
+      (token) => token.value === refreshToken,
+    );
+    if (!storedToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const payload = this.jwtService.verify(refreshToken);
+    if (payload.type !== 'refresh') {
+      throw new UnauthorizedException('Invalid token type');
+    }
+
+    const user = this.users.find((user) => user.id === payload.sub);
+    if (!user) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const newPayload = {
+      username: user.email,
+      sub: user.id,
+      roles: user.roles,
+    };
+
+    const newAccessToken = this.jwtService.sign(
+      { ...newPayload, type: 'access' },
+      { expiresIn: '60s' },
+    );
+
+    const newRefreshToken = this.jwtService.sign(
+      { ...newPayload, type: 'refresh' },
+      { expiresIn: '1h' },
+    );
+
+    storedToken.value = newRefreshToken;
+
+    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }
 }
