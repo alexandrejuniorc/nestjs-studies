@@ -1,0 +1,19 @@
+@BASE_URL=http://localhost:3000
+
+### signup
+POST {{BASE_URL}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@acme.com",
+  "password": "test"
+}
+
+### signin
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test@acme.com",
+  "password": "test"
+}
