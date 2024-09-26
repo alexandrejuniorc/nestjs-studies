@@ -8,15 +8,14 @@ import { scrypt as _scrypt, randomBytes } from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_scrypt);
+const users = [];
 
 @Injectable()
 export class AuthService {
-  private readonly users = [];
-
   constructor(private readonly jwtService: JwtService) {}
 
-  async signUp(email: string, password: string) {
-    const userExists = this.users.find((user) => user.email === email);
+  async signUp(email: string, password: string, roles: string[] = []) {
+    const userExists = users.find((user) => user.email === email);
 
     if (userExists) {
       throw new BadRequestException('User already exists');
@@ -26,11 +25,9 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     const passwordHash = `${salt}.${hash.toString('hex')}`;
 
-    const user = { email, password: passwordHash };
+    const user = { email, password: passwordHash, roles };
 
-    this.users.push(user);
-
-    console.log('Signed up', user);
+    users.push(user);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...result } = user;
@@ -39,7 +36,7 @@ export class AuthService {
   }
 
   async signIn(email: string, password: string) {
-    const user = this.users.find((user) => user.email === email);
+    const user = users.find((user) => user.email === email);
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -52,8 +49,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    console.log('Signed in', user);
-    const payload = { username: user.email, sub: user.userId };
+    const payload = {
+      username: user.email,
+      sub: user.userId,
+      roles: user.roles,
+    };
     return { access_token: this.jwtService.sign(payload) };
   }
 }

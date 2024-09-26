@@ -5,8 +5,9 @@ POST {{BASE_URL}}/auth/signup
 Content-Type: application/json
 
 {
-  "email": "test@acme.com",
-  "password": "test"
+  "email": "test2@acme.com",
+  "password": "test",
+  "roles": []
 }
 
 ### signin
@@ -14,6 +15,6 @@ POST {{BASE_URL}}/auth/signin
 Content-Type: application/json
 
 {
-  "email": "test@acme.com",
+  "email": "test2@acme.com",
   "password": "test"
 }

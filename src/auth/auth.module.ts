@@ -8,6 +8,7 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
+    PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -15,10 +16,9 @@ import { JwtStrategy } from './jwt.strategy';
         signOptions: { expiresIn: '60s' },
       }),
     }),
-    PassportModule,
   ],
-  controllers: [AuthController],
-  exports: [JwtStrategy],
   providers: [AuthService, JwtStrategy],
+  exports: [JwtModule, JwtStrategy],
+  controllers: [AuthController],
 })
 export class AuthModule {}
