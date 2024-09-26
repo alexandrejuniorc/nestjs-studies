@@ -3,12 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DevelopersModule } from './developers/developers.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { StarWarsModule } from './star-wars/star-wars.module';
+import { AppConfigModule } from './app-config/app-config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    AppConfigModule,
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -20,6 +21,7 @@ import { StarWarsModule } from './star-wars/star-wars.module';
     }),
     DevelopersModule,
     StarWarsModule,
+    AppConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],
